@@ -307,16 +307,12 @@ const FIREBASE_CONFIG = {
   appId: "1:109103648575:web:298a3f6094f01efbff8d8a"
 };
 
-// Ruxsat etilgan Google emaillar ro'yxati (oila a'zolari)
-const ALLOWED_EMAILS = [
-  "sizning_email@gmail.com",
-  "oila_azosi1@gmail.com",
-  "oila_azosi2@gmail.com"
-];
+// Eslatma: oldin faqat ro'yxatdagi emaillar kira olardi, endi istalgan
+// Google akkaunt ro'yxatdan o'tishi mumkin (parol + email ID orqali himoyalangan)
 
 // EmailJS sozlamalari (emailjs.com'da ro'yxatdan o'tib oling)
-const EMAILJS_PUBLIC_KEY = "SIZNING_EMAILJS_PUBLIC_KEY";
-const EMAILJS_SERVICE_ID = "SIZNING_EMAILJS_SERVICE_ID";
+const EMAILJS_PUBLIC_KEY = "wr6hRUQjyon61pg-u";
+const EMAILJS_SERVICE_ID = "service_vukrrlr";
 const EMAILJS_TEMPLATE_ID = "SIZNING_EMAILJS_TEMPLATE_ID"; // shablonda {{to_email}} va {{id_code}} bo'lishi kerak
 
 // ========== INITSIALIZATSIYA ==========
@@ -349,11 +345,6 @@ function signInWithGoogle() {
 }
 
 function onGoogleSignedIn(user) {
-  if (!ALLOWED_EMAILS.includes(user.email)) {
-    auth.signOut();
-    setError('err-google', "Bu Google akkaunt ro'yxatdan o'tmagan. Uy egasiga murojaat qiling.");
-    return;
-  }
   currentUser = user;
 
   const hasPassword = user.providerData.some(p => p.providerId === 'password');
