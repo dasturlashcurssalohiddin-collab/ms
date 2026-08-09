@@ -2,30 +2,40 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Qulf Nazorati</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B0B0D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0B0E11;
-    --panel:#12171D;
-    --panel-2:#181F26;
-    --line:#232B33;
-    --text:#E7ECEF;
-    --muted:#7C8792;
-    --amber:#F2A93B;
-    --amber-dim:#8A6A2C;
-    --green:#37D67A;
-    --red:#FF5C5C;
+    --bg:#0B0B0D;
+    --panel:#1A1A1D;
+    --panel-2:#232326;
+    --line:#2E2E32;
+    --text:#F5F5F5;
+    --muted:#9A9AA0;
+    --green:#4CAF50;
+    --green-dim:rgba(76,175,80,0.15);
+    --red:#C0392B;
+    --red-dim:rgba(192,57,43,0.15);
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    background:radial-gradient(circle at 50% -10%, #1A2129 0%, #0B0E11 55%);
+    background:var(--bg);
     color:var(--text);
     font-family:'Inter',sans-serif;
     min-height:100vh;
+    min-height:100dvh;
+  }
+  .screen{display:none;min-height:100vh;min-height:100dvh;}
+  .screen.active{display:flex;flex-direction:column;}
+
+  /* ===== Kirish ekranlari (google/parol/id) — markazlashtirilgan karta ===== */
+  .auth-wrap{
+    flex:1;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -38,332 +48,238 @@
     border:1px solid var(--line);
     border-radius:18px;
     padding:32px 28px;
-    box-shadow:0 20px 60px rgba(0,0,0,0.45);
   }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:28px;
-  }
-  .brand-dot{
-    width:10px;height:10px;border-radius:50%;
-    background:var(--amber);
-    box-shadow:0 0 12px var(--amber);
-  }
-  .brand-name{
-    font-size:13px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--muted);
-    font-weight:600;
-  }
-  h1{
-    font-size:22px;
-    margin:0 0 6px;
-    font-weight:700;
-  }
-  .sub{
-    color:var(--muted);
-    font-size:14px;
-    line-height:1.5;
-    margin:0 0 24px;
-  }
+  h1{font-size:22px;margin:0 0 6px;font-weight:800;}
+  .sub{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 24px;}
   .btn{
-    width:100%;
-    border:none;
-    border-radius:12px;
-    padding:14px 16px;
-    font-size:15px;
-    font-weight:600;
-    cursor:pointer;
-    transition:transform .12s ease, filter .12s ease;
-    font-family:inherit;
+    width:100%;border:none;border-radius:12px;padding:14px 16px;
+    font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;
+    transition:filter .12s ease, transform .1s ease;
   }
   .btn:active{transform:scale(0.98);}
-  .btn-primary{
-    background:var(--amber);
-    color:#1A1204;
-  }
-  .btn-primary:hover{filter:brightness(1.08);}
-  .btn-ghost{
-    background:transparent;
-    border:1px solid var(--line);
-    color:var(--text);
-    margin-top:10px;
-  }
-  .btn-ghost:hover{border-color:var(--amber-dim);}
-  .btn-danger{
-    background:var(--red);
-    color:#2A0505;
-  }
-  .btn-google{
-    background:#fff;
-    color:#1a1a1a;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-  }
+  .btn-primary{background:#fff;color:#0B0B0D;}
+  .btn-primary:hover{filter:brightness(0.92);}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--text);margin-top:10px;}
+  .btn-ghost:hover{border-color:#555;}
+  .btn-danger{background:var(--red);color:#fff;}
+  .btn-google{background:#fff;color:#1a1a1a;display:flex;align-items:center;justify-content:center;gap:10px;}
   input{
-    width:100%;
-    background:var(--panel-2);
-    border:1px solid var(--line);
-    color:var(--text);
-    border-radius:10px;
-    padding:13px 14px;
-    font-size:15px;
-    font-family:inherit;
-    margin-bottom:12px;
-    outline:none;
+    width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);
+    border-radius:10px;padding:13px 14px;font-size:15px;font-family:inherit;
+    margin-bottom:12px;outline:none;
   }
-  input:focus{border-color:var(--amber-dim);}
-  .error{
-    color:var(--red);
-    font-size:13px;
-    margin:-4px 0 12px;
-    min-height:16px;
-  }
-  .hint{
-    color:var(--muted);
-    font-size:12px;
-    margin-top:14px;
-    line-height:1.5;
-  }
-  .screen{display:none;}
-  .screen.active{display:block;}
+  input:focus{border-color:#555;}
+  .error{color:var(--red);font-size:13px;margin:-4px 0 12px;min-height:16px;}
+  .hint{color:var(--muted);font-size:12px;margin-top:14px;line-height:1.5;}
 
-  /* --- Displey (LCD) uslubidagi kod ko'rsatkichi --- */
-  .lcd-wrap{
-    text-align:center;
-    margin:6px 0 20px;
+  /* ===== PULT EKRANI (asosiy boshqaruv) ===== */
+  #screen-dashboard{padding:20px;position:relative;}
+  .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+  .gear-btn{
+    width:44px;height:44px;border-radius:50%;
+    background:var(--panel);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
   }
-  .lcd-label{
-    color:var(--muted);
-    font-size:11px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    margin-bottom:10px;
-  }
-  .lcd{
-    display:inline-flex;
-    gap:8px;
-    background:#05070A;
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:18px 22px;
-  }
-  .lcd-digit{
-    font-family:'JetBrains Mono',monospace;
-    font-size:34px;
-    font-weight:800;
-    color:var(--amber);
-    text-shadow:0 0 14px rgba(242,169,59,0.55);
-    width:26px;
-    text-align:center;
-  }
-  @keyframes flash{
-    0%{opacity:.2;}
-    100%{opacity:1;}
-  }
-  .lcd.pulse .lcd-digit{
-    animation:flash .5s ease;
-  }
-  .lcd-sub{
-    color:var(--muted);
-    font-size:12px;
-    margin-top:10px;
-  }
+  .gear-btn svg{width:20px;height:20px;stroke:var(--text);}
+  .remote-deco{opacity:.55;}
 
-  /* --- Virtual pult --- */
-  .keypad{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin:18px 0;
+  .prompt-box{
+    background:#fff;color:#0B0B0D;border-radius:14px;
+    padding:18px 20px;text-align:center;font-size:20px;font-weight:800;
+    margin-bottom:16px;letter-spacing:.02em;
   }
-  .key{
-    background:var(--panel-2);
-    border:1px solid var(--line);
-    color:var(--text);
-    border-radius:12px;
-    padding:16px 0;
-    font-size:19px;
-    font-weight:600;
-    font-family:'JetBrains Mono',monospace;
-    cursor:pointer;
-  }
-  .key:active{background:var(--amber-dim);}
-  .key.wide{grid-column:span 3;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;}
 
   .status-banner{
-    border-radius:12px;
-    padding:14px 16px;
-    text-align:center;
-    font-weight:700;
-    margin-bottom:16px;
-    font-size:14px;
+    border-radius:14px;padding:16px;text-align:center;font-weight:800;
+    font-size:18px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px;
   }
-  .status-locked{background:rgba(255,92,92,0.12);color:var(--red);border:1px solid rgba(255,92,92,0.3);}
-  .status-unlocked{background:rgba(55,214,122,0.12);color:var(--green);border:1px solid rgba(55,214,122,0.3);}
+  .status-unlocked{background:var(--green);color:#fff;}
+  .status-locked{background:var(--red);color:#fff;}
 
-  /* Qulf ochiq turganda doimiy, ko'zga tashlanadigan ogohlantirish */
-  @keyframes pulseGlow{
-    0%,100%{box-shadow:0 0 0 0 rgba(55,214,122,0.45);}
-    50%{box-shadow:0 0 0 10px rgba(55,214,122,0);}
-  }
-  .status-banner.status-unlocked{
-    position:sticky;
-    top:0;
-    z-index:5;
-    animation:pulseGlow 1.6s ease-in-out infinite;
-  }
+  .lcd-wrap{text-align:center;margin:4px 0 18px;}
+  .lcd-label{color:var(--muted);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;}
+  .lcd{display:inline-flex;gap:8px;background:#050506;border:1px solid var(--line);border-radius:14px;padding:16px 20px;}
+  .lcd-digit{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:800;color:#fff;width:24px;text-align:center;}
+  .lcd-sub{color:var(--muted);font-size:12px;margin-top:8px;}
 
-  /* Mobilda sayt to'liq ekranli "pult" rejimida ochiladi */
-  @media (max-width:480px){
-    body{padding:0;align-items:stretch;}
-    .card{
-      max-width:100%;
-      min-height:100vh;
-      border-radius:0;
-      border:none;
-      display:flex;
-      flex-direction:column;
-    }
-    .screen.active{
-      display:flex;
-      flex-direction:column;
-      flex:1;
-    }
-    #screen-dashboard.active{
-      flex:1;
-    }
-    .keypad{flex-shrink:0;}
-    .key{padding:20px 0;font-size:22px;}
+  .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;flex:1;}
+  .key{
+    background:var(--panel-2);border:1px solid var(--line);color:var(--text);
+    border-radius:14px;font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace;
+    cursor:pointer;min-height:64px;
   }
+  .key:active{background:#333;}
+  .key.wide{grid-column:span 3;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;min-height:48px;}
+  .user-email-small{color:var(--muted);font-size:12px;text-align:center;margin-top:10px;}
 
-  /* Ro'yxatdan o'tgan foydalanuvchilar bo'limi */
-  .users-section{
-    margin-top:22px;
-    padding-top:16px;
-    border-top:1px solid var(--line);
+  /* ===== SOZLAMALAR / AKKAUNTLAR EKRANI ===== */
+  #screen-settings{padding:20px;}
+  .settings-top{display:flex;align-items:center;gap:14px;margin-bottom:24px;}
+  .back-btn{
+    width:48px;height:48px;border-radius:12px;background:var(--panel-2);
+    border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
   }
-  .users-title{
-    font-size:12px;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    color:var(--muted);
-    margin-bottom:10px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+  .back-btn svg{width:20px;height:20px;stroke:var(--text);}
+  .settings-title{
+    flex:1;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;font-weight:700;font-size:15px;text-align:center;
   }
-  .users-count{
-    background:var(--panel-2);
-    color:var(--amber);
-    border-radius:20px;
-    padding:2px 10px;
-    font-size:12px;
-    font-weight:700;
+  .settings-body{display:flex;flex-direction:column;gap:16px;}
+  .settings-btn{
+    width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);
+    border-radius:12px;padding:18px 16px;font-size:15px;font-weight:600;text-align:center;cursor:pointer;font-family:inherit;
   }
-  .user-item{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:8px 0;
-    font-size:13px;
-    color:var(--text);
-    border-bottom:1px solid rgba(255,255,255,0.04);
+  .settings-btn:active{background:#2c2c30;}
+  .code-box{
+    background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;
   }
-  .user-item:last-child{border-bottom:none;}
-  .user-dot{
-    width:6px;height:6px;border-radius:50%;
-    background:var(--green);
-    flex-shrink:0;
-  }
+  .code-box .lcd{margin-top:8px;}
+  .settings-hint{color:var(--muted);font-size:12px;text-align:center;margin-top:10px;line-height:1.5;}
 
-  .user-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:18px;
-    padding-bottom:14px;
-    border-bottom:1px solid var(--line);
+  .accounts-panel{
+    background:var(--panel-2);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:20px;
   }
-  .user-email{font-size:13px;color:var(--muted);}
-  .link-btn{
-    background:none;border:none;color:var(--muted);
-    font-size:13px;text-decoration:underline;cursor:pointer;font-family:inherit;
+  .accounts-title{font-size:15px;font-weight:700;text-align:center;margin-bottom:14px;}
+  .account-row{
+    display:flex;align-items:center;gap:10px;padding:10px 8px;border-bottom:1px solid var(--line);font-size:13px;color:var(--text);
   }
+  .account-row:last-child{border-bottom:none;}
+  .account-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
+  .accounts-empty{color:var(--muted);font-size:13px;text-align:center;padding:12px 0;}
+  .accounts-count{color:var(--muted);font-size:12px;text-align:center;margin-top:8px;}
+
+  .change-pass-form{display:none;flex-direction:column;gap:0;margin-top:4px;}
+  .change-pass-form.active{display:flex;}
+  .offline-banner{
+    display:none;background:#3a2e0f;color:#F2A93B;border:1px solid #5a4718;
+    border-radius:10px;padding:10px 14px;font-size:12px;text-align:center;margin-bottom:14px;
+  }
+  .offline-banner.active{display:block;}
 </style>
 </head>
 <body>
 
-<div class="card">
-  <div class="brand">
-    <div class="brand-dot"></div>
-    <div class="brand-name">Qulf Nazorati</div>
-  </div>
-
-  <!-- 1-EKRAN: Google bilan kirish -->
-  <div id="screen-google" class="screen active">
-    <h1>Xush kelibsiz</h1>
-    <p class="sub">Davom etish uchun Google akkauntingiz bilan kiring.</p>
-    <button class="btn btn-google" onclick="signInWithGoogle()">
-      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.6 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4c-7.7 0-14.4 4.3-17.7 10.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.4-1.9 14.3-5.1l-6.6-5.4C29.6 35.4 26.9 36 24 36c-5.2 0-9.6-3.3-11.2-7.9l-6.6 5.1C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.4-2.4 4.4-4.5 5.8l6.6 5.4C41.5 36 44 30.4 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>
-      Google bilan kirish
-    </button>
-    <div id="err-google" class="error"></div>
-  </div>
-
-  <!-- 2-EKRAN: Parol (kirish yoki o'rnatish) -->
-  <div id="screen-password" class="screen">
-    <h1 id="password-title">Parolni kiriting</h1>
-    <p class="sub" id="password-sub">Bu akkauntga bog'langan parolni kiriting.</p>
-    <input type="password" id="password-input" placeholder="Parol" autocomplete="current-password">
-    <div id="err-password" class="error"></div>
-    <button class="btn btn-primary" onclick="submitPassword()">Davom etish</button>
-    <button class="btn btn-ghost" onclick="signOutAll()">Bekor qilish</button>
-  </div>
-
-  <!-- 3-EKRAN: Emailga kelgan ID kutilmoqda -->
-  <div id="screen-waiting" class="screen">
-    <h1>ID kod yuborildi</h1>
-    <p class="sub">Gmail pochtangizga (<span id="waiting-email"></span>) 6 xonali ID kod yubordik. Kod 5 daqiqada yangilanadi.</p>
-    <input type="text" id="id-input" placeholder="ID kodni kiriting" maxlength="6" inputmode="numeric">
-    <div id="err-id" class="error"></div>
-    <button class="btn btn-primary" onclick="submitId()">Tasdiqlash</button>
-    <button class="btn btn-ghost" onclick="resendId()">Qayta yuborish</button>
-    <p class="hint">Xat kelmasa spam papkasini tekshiring.</p>
-  </div>
-
-  <!-- 4-EKRAN: Boshqaruv paneli -->
-  <div id="screen-dashboard" class="screen">
-    <div class="user-row">
-      <span class="user-email" id="dash-email"></span>
-      <button class="link-btn" onclick="signOutAll()">Chiqish</button>
+<!-- ========== 1-EKRAN: GOOGLE BILAN KIRISH ========== -->
+<div id="screen-google" class="screen active">
+  <div class="auth-wrap">
+    <div class="card">
+      <h1>Xush kelibsiz</h1>
+      <p class="sub">Davom etish uchun Google akkauntingiz bilan kiring.</p>
+      <button class="btn btn-google" onclick="signInWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.6 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4c-7.7 0-14.4 4.3-17.7 10.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.4-1.9 14.3-5.1l-6.6-5.4C29.6 35.4 26.9 36 24 36c-5.2 0-9.6-3.3-11.2-7.9l-6.6 5.1C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.4-2.4 4.4-4.5 5.8l6.6 5.4C41.5 36 44 30.4 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>
+        Google bilan kirish
+      </button>
+      <div id="err-google" class="error"></div>
     </div>
-
-    <div id="status-banner" class="status-banner status-locked">🔒 Yopiq</div>
-
-    <div class="lcd-wrap">
-      <div class="lcd-label">Joriy qulf kodi</div>
-      <div class="lcd" id="lcd-code">
-        <span class="lcd-digit">-</span><span class="lcd-digit">-</span><span class="lcd-digit">-</span><span class="lcd-digit">-</span>
-      </div>
-      <div class="lcd-sub">Har 60 soniyada yangilanadi</div>
-    </div>
-
-    <div class="keypad" id="keypad"></div>
-    <button class="key wide" onclick="clearEntry()" style="margin-bottom:10px;">Tozalash</button>
-
-    <button id="unlock-open-msg" class="btn btn-danger" style="display:none;" onclick="sendLockCommand()">🔓 Yopish</button>
-
-    <div id="err-code" class="error"></div>
   </div>
 </div>
 
-<!-- Firebase (compat SDK — qo'shimcha build vositasisiz ishlaydi) -->
+<!-- ========== 2-EKRAN: PAROL ========== -->
+<div id="screen-password" class="screen">
+  <div class="auth-wrap">
+    <div class="card">
+      <h1 id="password-title">Parolni kiriting</h1>
+      <p class="sub" id="password-sub">Bu akkauntga bog'langan parolni kiriting.</p>
+      <input type="password" id="password-input" placeholder="Parol" autocomplete="current-password">
+      <div id="err-password" class="error"></div>
+      <button class="btn btn-primary" onclick="submitPassword()">Davom etish</button>
+      <button class="btn btn-ghost" onclick="signOutAll()">Bekor qilish</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 3-EKRAN: ID KUTISH ========== -->
+<div id="screen-waiting" class="screen">
+  <div class="auth-wrap">
+    <div class="card">
+      <h1>ID kod yuborildi</h1>
+      <p class="sub">Gmail pochtangizga (<span id="waiting-email"></span>) 6 xonali ID kod yubordik. Kod 5 daqiqada yangilanadi.</p>
+      <input type="text" id="id-input" placeholder="ID kodni kiriting" maxlength="6" inputmode="numeric">
+      <div id="err-id" class="error"></div>
+      <button class="btn btn-primary" onclick="submitId()">Tasdiqlash</button>
+      <button class="btn btn-ghost" onclick="resendId()">Qayta yuborish</button>
+      <p class="hint">Xat kelmasa spam papkasini tekshiring. Bu qadam faqat birinchi marta kerak — keyingi safar to'g'ridan-to'g'ri kirasiz.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 4-EKRAN: PULT (asosiy boshqaruv) ========== -->
+<div id="screen-dashboard" class="screen">
+  <div class="top-bar">
+    <div class="gear-btn" onclick="openSettings()">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>
+    </div>
+    <svg class="remote-deco" width="34" height="60" viewBox="0 0 34 60" fill="none">
+      <rect x="1" y="1" width="32" height="58" rx="8" stroke="var(--line)" stroke-width="2"/>
+      <circle cx="17" cy="12" r="4" stroke="var(--line)" stroke-width="1.5"/>
+      <rect x="6" y="22" width="8" height="6" rx="2" stroke="var(--line)" stroke-width="1.5"/>
+      <rect x="20" y="22" width="8" height="6" rx="2" stroke="var(--line)" stroke-width="1.5"/>
+      <rect x="6" y="32" width="8" height="6" rx="2" stroke="var(--line)" stroke-width="1.5"/>
+      <rect x="20" y="32" width="8" height="6" rx="2" stroke="var(--line)" stroke-width="1.5"/>
+      <rect x="6" y="42" width="8" height="6" rx="2" stroke="var(--line)" stroke-width="1.5"/>
+      <rect x="20" y="42" width="8" height="6" rx="2" stroke="var(--line)" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <div id="offline-banner" class="offline-banner">📡 Internet yo'q — oxirgi ma'lum holat ko'rsatilmoqda</div>
+
+  <div class="prompt-box" id="prompt-box">PAROL kirting</div>
+  <div id="status-banner" class="status-banner status-locked">🔒 Qulf yopiq</div>
+
+  <div class="lcd-wrap">
+    <div class="lcd-label">Joriy qulf kodi</div>
+    <div class="lcd" id="lcd-code">
+      <span class="lcd-digit">-</span><span class="lcd-digit">-</span><span class="lcd-digit">-</span><span class="lcd-digit">-</span>
+    </div>
+    <div class="lcd-sub">Har 60 soniyada yangilanadi</div>
+  </div>
+
+  <div class="keypad" id="keypad"></div>
+  <button class="key wide" onclick="clearEntry()" style="margin-bottom:8px;">Tozalash</button>
+  <button id="unlock-open-msg" class="btn btn-danger" style="display:none;margin-bottom:8px;" onclick="sendLockCommand()">🔓 Yopish</button>
+
+  <div id="err-code" class="error"></div>
+  <div class="user-email-small" id="dash-email-small"></div>
+</div>
+
+<!-- ========== 5-EKRAN: SOZLAMALAR / AKKAUNTLAR ========== -->
+<div id="screen-settings" class="screen">
+  <div class="settings-top">
+    <div class="back-btn" onclick="closeSettings()">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+    </div>
+    <div class="settings-title" id="settings-email">O'z accauntim</div>
+  </div>
+
+  <div class="settings-body">
+    <button class="settings-btn" onclick="togglePasswordForm()">✏️ Parolimni o'zgartirish</button>
+
+    <div class="change-pass-form" id="change-pass-form">
+      <input type="password" id="current-pass-input" placeholder="Joriy parol" style="margin-top:12px;">
+      <input type="password" id="new-pass-input" placeholder="Yangi parol (kamida 6 belgi)">
+      <div id="err-changepass" class="error"></div>
+      <button class="btn btn-primary" onclick="changePassword()">Saqlash</button>
+    </div>
+
+    <div class="code-box">
+      <div class="lcd-label">Qulf paroli</div>
+      <div class="lcd" id="lcd-code-settings">
+        <span class="lcd-digit">-</span><span class="lcd-digit">-</span><span class="lcd-digit">-</span><span class="lcd-digit">-</span>
+      </div>
+      <div class="settings-hint">Ogoh bo'ling, har 1 minutda (60 soniyada) parol o'zgaradi</div>
+    </div>
+
+    <div class="accounts-panel">
+      <div class="accounts-title">Accauntlar Menyusi</div>
+      <div id="accounts-list"></div>
+      <div class="accounts-count" id="accounts-count"></div>
+    </div>
+
+    <button class="btn btn-ghost" onclick="signOutAll()">Chiqish</button>
+  </div>
+</div>
+
+<!-- Firebase (compat SDK) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -371,7 +287,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <script>
-// ========== SOZLAMALAR (o'zingizga moslang) ==========
+// ========== SOZLAMALAR ==========
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyBnixvr_IT9jtN4bgHgmKrSJCBU4TyCeWk",
   authDomain: "mmms-1fa02.firebaseapp.com",
@@ -382,13 +298,9 @@ const FIREBASE_CONFIG = {
   appId: "1:109103648575:web:298a3f6094f01efbff8d8a"
 };
 
-// Eslatma: oldin faqat ro'yxatdagi emaillar kira olardi, endi istalgan
-// Google akkaunt ro'yxatdan o'tishi mumkin (parol + email ID orqali himoyalangan)
-
-// EmailJS sozlamalari (emailjs.com'da ro'yxatdan o'tib oling)
 const EMAILJS_PUBLIC_KEY = "wr6hRUQjyon61pg-u";
 const EMAILJS_SERVICE_ID = "service_vukrrlr";
-const EMAILJS_TEMPLATE_ID = "template_j3397sd"; // shablonda {{to_email}} va {{id_code}} bo'lishi kerak
+const EMAILJS_TEMPLATE_ID = "template_j3397sd";
 
 // ========== INITSIALIZATSIYA ==========
 firebase.initializeApp(FIREBASE_CONFIG);
@@ -399,16 +311,32 @@ emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 let currentUser = null;
 let idRotationTimer = null;
 let entry = "";
-let lockCodeListenerAttached = false;
+let realtimeListenersAttached = false;
+let lastKnownCode = null;
+let lastKnownStatus = null;
 
-// ========== YORDAMCHI: EKRANLARNI ALMASHTIRISH ==========
+// ========== OFFLINE KESH (localStorage) ==========
+function cacheSet(key, value) {
+  try { localStorage.setItem('qulf_' + key, JSON.stringify(value)); } catch (e) {}
+}
+function cacheGet(key) {
+  try {
+    const v = localStorage.getItem('qulf_' + key);
+    return v ? JSON.parse(v) : null;
+  } catch (e) { return null; }
+}
+function updateOfflineBanner() {
+  document.getElementById('offline-banner').classList.toggle('active', !navigator.onLine);
+}
+window.addEventListener('online', updateOfflineBanner);
+window.addEventListener('offline', updateOfflineBanner);
+
+// ========== EKRAN ALMASHTIRISH ==========
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-function setError(id, msg) {
-  document.getElementById(id).textContent = msg || "";
-}
+function setError(id, msg) { document.getElementById(id).textContent = msg || ""; }
 
 // ========== 1-QADAM: GOOGLE BILAN KIRISH ==========
 function signInWithGoogle() {
@@ -421,59 +349,65 @@ function signInWithGoogle() {
 
 function onGoogleSignedIn(user) {
   currentUser = user;
-
   const hasPassword = user.providerData.some(p => p.providerId === 'password');
   if (hasPassword) {
     document.getElementById('password-title').textContent = "Parolni kiriting";
     document.getElementById('password-sub').textContent = "Xavfsizlik uchun parolingizni tasdiqlang.";
-    document.getElementById('password-input').setAttribute('autocomplete', 'current-password');
     window.passwordMode = 'login';
   } else {
     document.getElementById('password-title').textContent = "Parol o'rnating";
-    document.getElementById('password-sub').textContent = "Birinchi marta kiryapsiz — kelajakda ishlatish uchun parol o'ylab toping (kamida 6 belgi).";
-    document.getElementById('password-input').setAttribute('autocomplete', 'new-password');
+    document.getElementById('password-sub').textContent = "Birinchi marta kiryapsiz — parol o'ylab toping (kamida 6 belgi).";
     window.passwordMode = 'register';
   }
   showScreen('screen-password');
 }
 
-// ========== 2-QADAM: PAROL (TASDIQLASH YOKI O'RNATISH) ==========
+// ========== 2-QADAM: PAROL ==========
 function submitPassword() {
   setError('err-password', '');
   const pwd = document.getElementById('password-input').value;
-  if (pwd.length < 6) {
-    setError('err-password', "Parol kamida 6 belgidan iborat bo'lishi kerak.");
-    return;
-  }
+  if (pwd.length < 6) { setError('err-password', "Parol kamida 6 belgidan iborat bo'lishi kerak."); return; }
 
   const credential = firebase.auth.EmailAuthProvider.credential(currentUser.email, pwd);
 
   if (window.passwordMode === 'register') {
     currentUser.linkWithCredential(credential)
-      .then(() => sendLoginId())
+      .then(() => {
+        db.ref('users/' + currentUser.uid).set({
+          email: currentUser.email,
+          created_at: Date.now(),
+          id_verified: false
+        });
+        sendLoginId();
+      })
       .catch(err => setError('err-password', "Xatolik: " + err.message));
   } else {
     currentUser.reauthenticateWithCredential(credential)
-      .then(() => sendLoginId())
+      .then(() => checkIdVerifiedThenProceed())
       .catch(() => setError('err-password', "Parol noto'g'ri."));
   }
 }
 
-// ========== 3-QADAM: EMAILGA ID YUBORISH (5 daqiqada yangilanadi) ==========
-function generateSixDigitId() {
-  return String(Math.floor(100000 + Math.random() * 900000));
+// Agar bu akkaunt oldin ID'ni bir marta tasdiqlagan bo'lsa — endi ID so'ralmaydi
+function checkIdVerifiedThenProceed() {
+  db.ref('users/' + currentUser.uid + '/id_verified').once('value').then(snap => {
+    if (snap.val() === true) {
+      showDashboard();
+    } else {
+      sendLoginId();
+    }
+  }).catch(() => sendLoginId());
 }
+
+// ========== 3-QADAM: EMAILGA ID YUBORISH ==========
+function generateSixDigitId() { return String(Math.floor(100000 + Math.random() * 900000)); }
 
 function sendLoginId() {
   const id = generateSixDigitId();
   const expiresAt = Date.now() + 5 * 60 * 1000;
-
   db.ref('login_sessions/' + currentUser.uid).set({ id: id, expires_at: expiresAt });
-
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-    to_email: currentUser.email,
-    id_code: id
-  }).catch(err => console.error("EmailJS xatosi:", err));
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: currentUser.email, id_code: id })
+    .catch(err => console.error("EmailJS xatosi:", err));
 
   document.getElementById('waiting-email').textContent = currentUser.email;
   document.getElementById('id-input').value = '';
@@ -485,26 +419,21 @@ function sendLoginId() {
     const newId = generateSixDigitId();
     const newExpiresAt = Date.now() + 5 * 60 * 1000;
     db.ref('login_sessions/' + currentUser.uid).set({ id: newId, expires_at: newExpiresAt });
-    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-      to_email: currentUser.email,
-      id_code: newId
-    }).catch(err => console.error("EmailJS xatosi:", err));
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: currentUser.email, id_code: newId })
+      .catch(err => console.error("EmailJS xatosi:", err));
   }, 5 * 60 * 1000);
 }
-
-function resendId() {
-  sendLoginId();
-}
+function resendId() { sendLoginId(); }
 
 // ========== 4-QADAM: ID NI TASDIQLASH ==========
 function submitId() {
   setError('err-id', '');
   const entered = document.getElementById('id-input').value.trim();
-
   db.ref('login_sessions/' + currentUser.uid).once('value').then(snap => {
     const data = snap.val();
     if (data && data.id === entered && Date.now() < data.expires_at) {
       if (idRotationTimer) { clearInterval(idRotationTimer); idRotationTimer = null; }
+      db.ref('users/' + currentUser.uid + '/id_verified').set(true);
       showDashboard();
     } else {
       setError('err-id', "ID noto'g'ri yoki muddati o'tgan. Qayta urinib ko'ring.");
@@ -512,12 +441,21 @@ function submitId() {
   });
 }
 
-// ========== 5-QADAM: BOSHQARUV PANELI ==========
+// ========== 5-QADAM: PULT (DASHBOARD) ==========
 function showDashboard() {
-  document.getElementById('dash-email').textContent = currentUser.email;
+  document.getElementById('dash-email-small').textContent = currentUser.email;
   buildKeypad();
   attachRealtimeListeners();
+  loadFromCacheIfOffline();
+  updateOfflineBanner();
   showScreen('screen-dashboard');
+}
+
+function loadFromCacheIfOffline() {
+  const code = cacheGet('lock_code');
+  const status = cacheGet('lock_status');
+  if (code) renderCode(code);
+  if (status) renderStatus(status);
 }
 
 function buildKeypad() {
@@ -528,11 +466,8 @@ function buildKeypad() {
     const btn = document.createElement('button');
     btn.className = 'key';
     btn.textContent = k;
-    if (k === '') {
-      btn.style.visibility = 'hidden';
-    } else {
-      btn.onclick = () => pressDigit(k);
-    }
+    if (k === '') { btn.style.visibility = 'hidden'; }
+    else { btn.onclick = () => pressDigit(k); }
     keypad.appendChild(btn);
   });
 }
@@ -540,62 +475,117 @@ function buildKeypad() {
 function pressDigit(d) {
   if (entry.length >= 4) return;
   entry += d;
+  renderLiveDigits(entry);
   if (entry.length === 4) {
+    document.getElementById('prompt-box').textContent = "PAROL KIRITILGAN";
     sendTryCode(entry);
     entry = "";
+    setTimeout(() => { document.getElementById('prompt-box').textContent = "PAROL kirting"; }, 1500);
   }
 }
+function clearEntry() { entry = ""; renderLiveDigits(""); }
 
-function clearEntry() {
-  entry = "";
+function renderLiveDigits(str) {
+  const digits = document.querySelectorAll('#lcd-code .lcd-digit');
+  for (let i = 0; i < 4; i++) digits[i].textContent = str[i] || "-";
 }
 
 function sendTryCode(code) {
   setError('err-code', '');
-  db.ref('commands').set({
-    action: 'try_code',
-    code: code,
-    requested_by: currentUser.email,
-    timestamp: Date.now()
-  }).catch(err => setError('err-code', "Yuborishda xatolik: " + err.message));
+  db.ref('commands').set({ action: 'try_code', code: code, requested_by: currentUser.email, timestamp: Date.now() })
+    .catch(err => setError('err-code', "Yuborishda xatolik: " + err.message));
+}
+function sendLockCommand() {
+  db.ref('commands').set({ action: 'lock', requested_by: currentUser.email, timestamp: Date.now() });
 }
 
-function sendLockCommand() {
-  db.ref('commands').set({
-    action: 'lock',
-    requested_by: currentUser.email,
-    timestamp: Date.now()
-  });
+function renderCode(code) {
+  cacheSet('lock_code', code);
+  if (entry.length === 0) renderLiveDigits(code); // faqat foydalanuvchi o'zi terayotgan bo'lmasa
+  const settingsDigits = document.querySelectorAll('#lcd-code-settings .lcd-digit');
+  for (let i = 0; i < 4; i++) settingsDigits[i].textContent = code[i] || "-";
+}
+function renderStatus(state) {
+  cacheSet('lock_status', state);
+  const banner = document.getElementById('status-banner');
+  const openBtn = document.getElementById('unlock-open-msg');
+  if (state === 'unlocked') {
+    banner.textContent = '🔓 Qulf ochiq';
+    banner.className = 'status-banner status-unlocked';
+    openBtn.style.display = 'block';
+  } else {
+    banner.textContent = '🔒 Qulf yopiq';
+    banner.className = 'status-banner status-locked';
+    openBtn.style.display = 'none';
+  }
 }
 
 function attachRealtimeListeners() {
-  if (lockCodeListenerAttached) return;
-  lockCodeListenerAttached = true;
+  if (realtimeListenersAttached) return;
+  realtimeListenersAttached = true;
 
-  db.ref('lock_code/value').on('value', snap => {
-    const code = snap.val() || "----";
-    const lcd = document.getElementById('lcd-code');
-    const digits = lcd.querySelectorAll('.lcd-digit');
-    for (let i = 0; i < 4; i++) digits[i].textContent = code[i] || "-";
-    lcd.classList.remove('pulse');
-    void lcd.offsetWidth; // reflow — animatsiyani qayta ishga tushirish uchun
-    lcd.classList.add('pulse');
-  });
+  db.ref('lock_code/value').on('value', snap => { const v = snap.val(); if (v) renderCode(v); });
+  db.ref('lock_status/state').on('value', snap => { const v = snap.val(); if (v) renderStatus(v); });
 
-  db.ref('lock_status').on('value', snap => {
-    const data = snap.val() || {};
-    const banner = document.getElementById('status-banner');
-    const openBtn = document.getElementById('unlock-open-msg');
-    if (data.state === 'unlocked') {
-      banner.textContent = '🔓 Ochildi';
-      banner.className = 'status-banner status-unlocked';
-      openBtn.style.display = 'block';
-    } else {
-      banner.textContent = '🔒 Yopiq';
-      banner.className = 'status-banner status-locked';
-      openBtn.style.display = 'none';
+  // Jismoniy pultdan real vaqtda kiritilayotgan raqamlarni ko'rsatish
+  db.ref('live_input/digits').on('value', snap => {
+    const v = snap.val() || "";
+    if (v.length > 0) {
+      renderLiveDigits(v);
+      document.getElementById('prompt-box').textContent = v.length === 4 ? "PAROL KIRITILGAN" : "PAROL kirting";
     }
   });
+
+  // Accauntlar ro'yxati (sozlamalar ekrani uchun)
+  db.ref('users').on('value', snap => {
+    const data = snap.val() || {};
+    cacheSet('users_list', data);
+    renderAccountsList(data);
+  });
+}
+
+function renderAccountsList(data) {
+  const list = document.getElementById('accounts-list');
+  const countEl = document.getElementById('accounts-count');
+  const emails = Object.values(data).map(u => u.email).filter(Boolean);
+  if (emails.length === 0) {
+    list.innerHTML = '<div class="accounts-empty">Hali hech kim ro\'yxatdan o\'tmagan</div>';
+  } else {
+    list.innerHTML = emails.map(e => `<div class="account-row"><span class="account-dot"></span>${e}</div>`).join('');
+  }
+  countEl.textContent = emails.length + " ta akkaunt ro'yxatdan o'tgan";
+}
+
+// ========== SOZLAMALAR EKRANI ==========
+function openSettings() {
+  document.getElementById('settings-email').textContent = currentUser.email;
+  const cachedUsers = cacheGet('users_list');
+  if (cachedUsers) renderAccountsList(cachedUsers);
+  showScreen('screen-settings');
+}
+function closeSettings() {
+  document.getElementById('change-pass-form').classList.remove('active');
+  showScreen('screen-dashboard');
+}
+function togglePasswordForm() {
+  document.getElementById('change-pass-form').classList.toggle('active');
+}
+function changePassword() {
+  setError('err-changepass', '');
+  const currentPass = document.getElementById('current-pass-input').value;
+  const newPass = document.getElementById('new-pass-input').value;
+  if (newPass.length < 6) { setError('err-changepass', "Yangi parol kamida 6 belgi bo'lishi kerak."); return; }
+
+  const credential = firebase.auth.EmailAuthProvider.credential(currentUser.email, currentPass);
+  currentUser.reauthenticateWithCredential(credential)
+    .then(() => currentUser.updatePassword(newPass))
+    .then(() => {
+      document.getElementById('current-pass-input').value = '';
+      document.getElementById('new-pass-input').value = '';
+      document.getElementById('change-pass-form').classList.remove('active');
+      setError('err-changepass', '');
+    })
+    .catch(err => setError('err-changepass', "Xatolik: joriy parol noto'g'ri yoki " + err.message));
 }
 
 // ========== CHIQISH ==========
@@ -607,13 +597,16 @@ function signOutAll() {
   showScreen('screen-google');
 }
 
-// Sahifa yangilanganda: agar allaqachon Google orqali kirgan bo'lsa,
-// baribir parol/ID bosqichlaridan o'tishi kerak (2FA xavfsizligi uchun avtomatik dashboardga o'tkazilmaydi)
 auth.onAuthStateChanged(user => {
-  if (!user) {
-    showScreen('screen-google');
-  }
+  if (!user) showScreen('screen-google');
 });
+
+// Service worker (offline uchun app-shell keshlash)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
